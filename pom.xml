@@ -10,6 +10,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>human</module>
+        <module>civil_registry</module>
     </modules>
 
     <properties>
@@ -39,6 +40,12 @@
         </dependency>
 
     </dependencies>
+
+    <profiles>
+        <profile><id>PROM</id></profile>
+        <profile><id>TEST</id></profile>
+    </profiles>
+
 
 
 </project>
