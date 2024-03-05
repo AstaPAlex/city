@@ -8,7 +8,7 @@ import lombok.experimental.FieldDefaults;
 
 @Getter
 @Setter
-@FieldDefaults(level = AccessLevel.PRIVATE)
+@FieldDefaults(level = AccessLevel.PROTECTED)
 public class Employee extends Human {
   @NonNull
   int rate;
