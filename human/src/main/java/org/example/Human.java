@@ -42,7 +42,7 @@ public class Human {
     }
 
     public Human createChild(@NonNull String name, @NonNull String surname, @NonNull String patronymic,
-                             @NonNull Gender gender,@NonNull Human parent){
+                             @NonNull Gender gender,@NonNull Human parent) throws EqualsGenderParentsException {
         if (!this.getGender().equals(parent.getGender())) {
             Human child = new Human(name, surname, patronymic, gender);
             child.addParents(this, parent);

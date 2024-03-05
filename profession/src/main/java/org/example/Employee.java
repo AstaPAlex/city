@@ -10,6 +10,7 @@ import lombok.experimental.FieldDefaults;
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Employee extends Human {
+  @NonNull
   int rate;
 
   public Employee(@NonNull String name, @NonNull String surname,
