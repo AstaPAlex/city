@@ -15,17 +15,17 @@ public class RunnerTest {
 
   private static void setReport(CivilRegistry civilRegistry) {
     Citizen ivan = new Citizen("Иван", "Иванов", "Иванович",
-            Gender.MAN, FamilyStatus.NOT_WIFE);
+            Gender.MAN, FamilyStatus.NOT_MARRIED);
     Citizen sveta = new Citizen("Светлана", "Павлова", "Николаевна",
-            Gender.WOMAN, FamilyStatus.NOT_HUSBAND);
+            Gender.WOMAN, FamilyStatus.NOT_MARRIED);
     Citizen kolya = new Citizen("Николай", "Кириллов", "Иосифович",
-            Gender.MAN, FamilyStatus.NOT_WIFE);
+            Gender.MAN, FamilyStatus.NOT_MARRIED);
     Citizen olga = new Citizen("Ольга", "Белова", "Александровна",
-            Gender.WOMAN, FamilyStatus.NOT_HUSBAND);
+            Gender.WOMAN, FamilyStatus.NOT_MARRIED);
     Citizen dmitry = new Citizen("Дмитрий", "Новиков", "Анатольевич",
-            Gender.MAN, FamilyStatus.NOT_WIFE);
+            Gender.MAN, FamilyStatus.NOT_MARRIED);
     Citizen nadya = new Citizen("Надежда", "Павлова", "Александровна",
-            Gender.WOMAN, FamilyStatus.NOT_HUSBAND);
+            Gender.WOMAN, FamilyStatus.NOT_MARRIED);
 
     civilRegistry.setRecordMarriageRegistry(dmitry, nadya, LocalDate.now());
     civilRegistry.setRecordMarriageRegistry(ivan, sveta, LocalDate.now());

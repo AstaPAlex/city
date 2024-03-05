@@ -9,5 +9,5 @@ import lombok.experimental.FieldDefaults;
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public enum FamilyStatus {
-    NOT_HUSBAND, NOT_WIFE, MARRIED
+    NOT_MARRIED, MARRIED, DIVORSED
 }

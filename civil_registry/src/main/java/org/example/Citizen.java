@@ -13,21 +13,9 @@ public class Citizen extends Human {
   Citizen citizen;
 
   public Citizen(@NonNull String name, @NonNull String surname, @NonNull String patronymic,
-               @NonNull Gender gender, FamilyStatus familyStatus) {
+               @NonNull Gender gender, @NonNull FamilyStatus familyStatus) {
     super(name, surname, patronymic, gender);
     this.familyStatus = familyStatus;
-  }
-
-  public Citizen(@NonNull String name, @NonNull String surname, @NonNull String patronymic,
-               @NonNull Gender gender, @NonNull FamilyStatus familyStatus, Citizen citizen) {
-    this(name, surname, patronymic, gender, familyStatus);
-    this.citizen = citizen;
-  }
-
-  public Citizen(@NonNull String name, @NonNull String surname, @NonNull String patronymic,
-               @NonNull Gender gender, Citizen citizen) {
-    super(name, surname, patronymic, gender);
-    this.citizen = citizen;
   }
 
   public Citizen(Human human) {

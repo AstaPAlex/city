@@ -1,16 +1,21 @@
 package org.example;
 
-import java.time.LocalDate;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.*;
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
+import java.time.LocalDate;
 
 
+
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class CivilRegistry {
-  private String name;
-  private List<WriterTypeRegistry> records = new LinkedList<>();
-  private static Map<LocalDate, Integer> marriageList = new HashMap<>();
-  private static Map<LocalDate, Integer> divorceList = new HashMap<>();
-  private static Map<LocalDate, Integer> birthList = new HashMap<>();
-  private static Set<LocalDate> workDays = new TreeSet<>(LocalDate::compareTo);
+  String name;
+  List<WriterTypeRegistry> records = new LinkedList<>();
+  Map<LocalDate, Integer> marriageList = new HashMap<>();
+  Map<LocalDate, Integer> divorceList = new HashMap<>();
+  Map<LocalDate, Integer> birthList = new HashMap<>();
+  Set<LocalDate> workDays = new TreeSet<>(LocalDate::compareTo);
 
   public CivilRegistry(String name) {
     this.name = name;
@@ -50,9 +55,9 @@ public class CivilRegistry {
   * Создается запись гражданского действия за дату регистрации.
   */
   public void setRecordDivorceRegistry(Citizen man, Citizen woman, LocalDate date) {
-    man.setFamilyStatus(FamilyStatus.NOT_WIFE);
+    man.setFamilyStatus(FamilyStatus.DIVORSED);
     man.setCitizen(null);
-    woman.setFamilyStatus(FamilyStatus.NOT_HUSBAND);
+    woman.setFamilyStatus(FamilyStatus.DIVORSED);
     woman.setCitizen(null);
     setElementToMap(divorceList, date);
     workDays.add(date);
@@ -67,23 +72,26 @@ public class CivilRegistry {
    */
   public void report() {
     System.out.printf("Статистика по ЗАГС: %s\n", name);
-    int countMarriage = 0;
-    int countDivorce = 0;
-    int countBirth = 0;
-    for (LocalDate workDay : workDays) {
-      if (marriageList.containsKey(workDay)) {
-        countMarriage = marriageList.get(workDay);
-      }
-      if (divorceList.containsKey(workDay)) {
-        countDivorce = divorceList.get(workDay);
-      }
-      if (birthList.containsKey(workDay)) {
-        countBirth = birthList.get(workDay);
-      }
-      System.out.printf("Дата %s: количество свадеб - %s,"
+    AtomicInteger countMarriage = new AtomicInteger(0);
+    AtomicInteger countDivorce = new AtomicInteger(0);
+    AtomicInteger countBirth = new AtomicInteger(0);
+    workDays.stream().peek(workDay -> {
+      countMarriage.set(0);
+      countDivorce.set(0);
+      countBirth.set(0);
+      countMarriage.addAndGet(getCount(marriageList, workDay));
+      countDivorce.addAndGet(getCount(divorceList, workDay));
+      countBirth.addAndGet(getCount(birthList, workDay));
+    }).forEach(workDay -> System.out.printf("Дата %s: количество свадеб - %s,"
                       + " количество разводов - %s, количество рождений - %s\n",
-              workDay.toString(), countMarriage, countDivorce, countBirth);
+                      workDay.toString(), countMarriage, countDivorce, countBirth));
+  }
+
+  private int getCount(Map<LocalDate, Integer> map, LocalDate date) {
+    if (map.containsKey(date)) {
+      return map.get(date);
     }
+    return 0;
   }
 
   public List<WriterTypeRegistry> getRecords() {
@@ -91,13 +99,6 @@ public class CivilRegistry {
   }
 
   private void setElementToMap(Map<LocalDate, Integer> map, LocalDate date) {
-    if (map.size() == 0) {
-      map.put(date, 1);
-    } else if (map.containsKey(date)) {
-      Integer value = map.get(date) + 1;
-      map.put(date, value);
-    } else {
-      map.put(date, 1);
-    }
+    map.put(date, map.getOrDefault(date, 0) + 1);
   }
 }
