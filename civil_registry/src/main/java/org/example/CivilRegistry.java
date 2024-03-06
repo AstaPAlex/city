@@ -1,21 +1,19 @@
 package org.example;
 
-import java.util.concurrent.atomic.AtomicInteger;
+import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
-import java.time.LocalDate;
-
-
+import org.apache.commons.collections4.MultiValuedMap;
+import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CivilRegistry {
   String name;
-  List<WriterTypeRegistry> records = new LinkedList<>();
-  Map<LocalDate, Integer> marriageList = new HashMap<>();
-  Map<LocalDate, Integer> divorceList = new HashMap<>();
-  Map<LocalDate, Integer> birthList = new HashMap<>();
-  Set<LocalDate> workDays = new TreeSet<>(LocalDate::compareTo);
+  MultiValuedMap<LocalDate, WriterTypeRegistry> marriageMap = new ArrayListValuedHashMap<>();
+  MultiValuedMap<LocalDate, WriterTypeRegistry> divorceMap = new ArrayListValuedHashMap<>();
+  MultiValuedMap<LocalDate, WriterTypeRegistry> birthMap = new ArrayListValuedHashMap<>();
 
   public CivilRegistry(String name) {
     this.name = name;
@@ -27,10 +25,10 @@ public class CivilRegistry {
    */
   public void setRecordBirthChildRegistry(Citizen child, Citizen father,
                                           Citizen mother, LocalDate date) {
-    setElementToMap(birthList, date);
-    workDays.add(date);
-    records.add(new WriterTypeRegistry(date, TypeRegistry.BIRTH_REGISTRATION,
+
+    birthMap.put(date, new WriterTypeRegistry(date, TypeRegistry.BIRTH_REGISTRATION,
             List.of(child, father, mother)));
+
   }
 
   /**
@@ -43,26 +41,24 @@ public class CivilRegistry {
     man.setCitizen(woman);
     woman.setFamilyStatus(FamilyStatus.MARRIED);
     woman.setCitizen(man);
-    setElementToMap(marriageList, date);
-    workDays.add(date);
-    records.add(new WriterTypeRegistry(date, TypeRegistry.MARRIAGE_REGISTRATION,
+
+    marriageMap.put(date, new WriterTypeRegistry(date, TypeRegistry.MARRIAGE_REGISTRATION,
             List.of(man, woman)));
   }
 
   /**
-  * 3.4.3 Регистрация развода - передаются мужчина и женщина + дата регистрации развода.
-  * Меняется семейный статус у мужчины и женщины. Заносится в список разводов.
-  * Создается запись гражданского действия за дату регистрации.
-  */
+   * 3.4.3 Регистрация развода - передаются мужчина и женщина + дата регистрации развода.
+   * Меняется семейный статус у мужчины и женщины. Заносится в список разводов.
+   * Создается запись гражданского действия за дату регистрации.
+   */
   public void setRecordDivorceRegistry(Citizen man, Citizen woman, LocalDate date) {
     man.setFamilyStatus(FamilyStatus.DIVORSED);
     man.setCitizen(null);
     woman.setFamilyStatus(FamilyStatus.DIVORSED);
     woman.setCitizen(null);
-    setElementToMap(divorceList, date);
-    workDays.add(date);
-    records.add(new WriterTypeRegistry(date,
-            TypeRegistry.DIVORCE_REGISTRATION, List.of(man, woman)));
+
+    divorceMap.put(date, new WriterTypeRegistry(date, TypeRegistry.DIVORCE_REGISTRATION,
+            List.of(man, woman)));
   }
 
   /**
@@ -72,33 +68,41 @@ public class CivilRegistry {
    */
   public void report() {
     System.out.printf("Статистика по ЗАГС: %s\n", name);
-    AtomicInteger countMarriage = new AtomicInteger(0);
-    AtomicInteger countDivorce = new AtomicInteger(0);
-    AtomicInteger countBirth = new AtomicInteger(0);
-    workDays.stream().peek(workDay -> {
-      countMarriage.set(0);
-      countDivorce.set(0);
-      countBirth.set(0);
-      countMarriage.addAndGet(getCount(marriageList, workDay));
-      countDivorce.addAndGet(getCount(divorceList, workDay));
-      countBirth.addAndGet(getCount(birthList, workDay));
-    }).forEach(workDay -> System.out.printf("Дата %s: количество свадеб - %s,"
-                      + " количество разводов - %s, количество рождений - %s\n",
-                      workDay.toString(), countMarriage, countDivorce, countBirth));
+
+    Map<LocalDate, Integer> countMarriageList = getCountList(sort(marriageMap));
+    Map<LocalDate, Integer> countDivorceList = getCountList(sort(divorceMap));
+    Map<LocalDate, Integer> countBirthList = getCountList(sort(birthMap));
+
+    Set<LocalDate> dates = new LinkedHashSet<>();
+    dates.addAll(countMarriageList.keySet());
+    dates.addAll(countDivorceList.keySet());
+    dates.addAll(countBirthList.keySet());
+    dates.stream()
+            .forEach(workDay ->
+                    System.out.printf("Дата %s: количество свадеб - %s,"
+                            + " количество разводов - %s, количество рождений - %s\n",
+                            workDay.toString(),
+                            countMarriageList.get(workDay) == null ? 0 : countMarriageList.get(workDay),
+                            countDivorceList.get(workDay) == null ? 0 : countDivorceList.get(workDay),
+                            countBirthList.get(workDay) == null ? 0 : countBirthList.get(workDay)));
   }
 
-  private int getCount(Map<LocalDate, Integer> map, LocalDate date) {
-    if (map.containsKey(date)) {
-      return map.get(date);
+  private List<Map.Entry<LocalDate, WriterTypeRegistry>> sort(MultiValuedMap<LocalDate, WriterTypeRegistry> map) {
+    return map.entries().stream()
+            .sorted(Comparator.comparing(Map.Entry::getKey))
+            .collect(Collectors.toList());
+  }
+
+  private Map<LocalDate, Integer> getCountList(List<Map.Entry<LocalDate, WriterTypeRegistry>> list) {
+    LocalDate localDatePrev = null;
+    Map<LocalDate, Integer> map = new LinkedHashMap<>();
+    for (Map.Entry<LocalDate, WriterTypeRegistry> entry : list) {
+      if (localDatePrev != entry.getKey()) {
+        long count = list.stream().filter(el1 -> el1.getKey().equals(entry.getKey())).count();
+        map.put(entry.getKey(), Integer.valueOf(Long.toString(count)));
+        localDatePrev = entry.getKey();
+      }
     }
-    return 0;
-  }
-
-  public List<WriterTypeRegistry> getRecords() {
-    return records;
-  }
-
-  private void setElementToMap(Map<LocalDate, Integer> map, LocalDate date) {
-    map.put(date, map.getOrDefault(date, 0) + 1);
+    return map;
   }
 }
