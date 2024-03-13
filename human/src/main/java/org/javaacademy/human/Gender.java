@@ -7,7 +7,7 @@ import lombok.experimental.FieldDefaults;
 
 @AllArgsConstructor
 @Getter
-@FieldDefaults(makeFinal=true, level= AccessLevel.PRIVATE)
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public enum Gender {
     MAN("Мужчина"), WOMAN("Женщина");
     String gender;

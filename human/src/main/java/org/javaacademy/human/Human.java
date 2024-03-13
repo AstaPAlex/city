@@ -1,16 +1,15 @@
 package org.javaacademy.human;
 
+import java.util.HashSet;
+import java.util.Set;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.apache.commons.lang3.StringUtils;
 import org.javaacademy.human.exceptions.EqualsGenderParentsException;
 
-import java.util.HashSet;
-import java.util.Set;
 @Getter
 @EqualsAndHashCode(exclude = {"father", "mother", "children"})
-@ToString(of = {"name", "surname", "patronymic", "gender"})
-@FieldDefaults(level=AccessLevel.PRIVATE)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Human {
     final String name;
     final String surname;
@@ -27,7 +26,7 @@ public class Human {
         this.gender = gender;
     }
 
-    private void addParents(Human parent1,Human parent2) {
+    private void addParents(@NonNull Human parent1, @NonNull Human parent2) {
         if (parent1.getGender().equals(Gender.MAN)) {
             father = parent1;
             mother = parent2;
@@ -35,6 +34,8 @@ public class Human {
             father = parent2;
             mother = parent1;
         }
+        parent1.addChild(this);
+        parent2.addChild(this);
     }
 
     private void addChild(Human child) {
@@ -42,15 +43,13 @@ public class Human {
     }
 
     public Human createChild(@NonNull String name, @NonNull String surname, @NonNull String patronymic,
-                             @NonNull Gender gender,@NonNull Human parent) throws EqualsGenderParentsException {
+                             @NonNull Gender gender, @NonNull Human parent) throws EqualsGenderParentsException {
         if (!this.getGender().equals(parent.getGender())) {
             Human child = new Human(name, surname, patronymic, gender);
             child.addParents(this, parent);
-            this.addChild(child);
-            parent.addChild(child);
             return child;
         } else {
-            throw new EqualsGenderParentsException("Parents have the same gender");
+            throw new EqualsGenderParentsException("Parents have the same gender!");
         }
     }
 

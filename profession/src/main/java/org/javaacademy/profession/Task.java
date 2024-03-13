@@ -1,6 +1,5 @@
 package org.javaacademy.profession;
 
-
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -11,7 +10,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Task {
     @NonNull
-    String name;
+     String name;
     @NonNull
     int hourCount;
     boolean isDone = false;

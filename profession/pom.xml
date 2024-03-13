@@ -6,12 +6,12 @@
     <parent>
         <groupId>org.javaacademy</groupId>
         <artifactId>city</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.0</version>
     </parent>
 
     <groupId>org.javaacademy.profession</groupId>
     <artifactId>profession</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.1</version>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -20,17 +20,18 @@
     </properties>
 
     <dependencies>
+
         <dependency>
             <groupId>org.javaacademy.human</groupId>
             <artifactId>human</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <version>1.0.1</version>
             <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.javaacademy.human</groupId>
-            <artifactId>human</artifactId>
-            <version>1.0.1-SNAPSHOT</version>
-            <scope>compile</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.commons</groupId>
+                    <artifactId>commons-collections4</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 

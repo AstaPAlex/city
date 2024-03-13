@@ -1,4 +1,6 @@
-package org.javaacademy.civil;
+package org.javaacademy.civil.zags;
+
+import static org.javaacademy.civil.zags.TypeRegistry.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -10,8 +12,6 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
-import static org.javaacademy.civil.TypeRegistry.*;
-
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class CivilRegistry {
@@ -19,11 +19,11 @@ public class CivilRegistry {
     String name;
     Map<LocalDate, List<WriterTypeRegistry>> listRegistry = new TreeMap<>(LocalDate::compareTo);
 
-    public void birthChild(Citizen father, Citizen mother, LocalDate date) {
+    public void birthChild(@NonNull Citizen father, @NonNull Citizen mother, @NonNull LocalDate date) {
         addRegistry(BIRTH_REGISTRATION, date, father, mother);
     }
 
-    public void registrationMarriage(Citizen man, Citizen woman, LocalDate date) {
+    public void registrationMarriage(@NonNull Citizen man, @NonNull Citizen woman, @NonNull LocalDate date) {
         man.setFamilyStatus(FamilyStatus.MARRIED);
         man.setMarriagePartner(woman);
         woman.setFamilyStatus(FamilyStatus.MARRIED);
@@ -31,7 +31,7 @@ public class CivilRegistry {
         addRegistry(MARRIAGE_REGISTRATION, date, man, woman);
     }
 
-    public void registrationDivorce(Citizen man, Citizen woman, LocalDate date) {
+    public void registrationDivorce(@NonNull Citizen man, @NonNull Citizen woman, @NonNull LocalDate date) {
         man.setFamilyStatus(FamilyStatus.DIVORCED);
         man.setMarriagePartner(null);
         woman.setFamilyStatus(FamilyStatus.DIVORCED);
@@ -39,7 +39,8 @@ public class CivilRegistry {
         addRegistry(DIVORCE_REGISTRATION, date, man, woman);
     }
 
-    private void addRegistry(TypeRegistry typeRegistry, LocalDate date, Citizen... citizens) {
+    private void addRegistry(@NonNull TypeRegistry typeRegistry, @NonNull LocalDate date,
+                             @NonNull Citizen... citizens) {
         if (!listRegistry.containsKey(date)) {
             listRegistry.put(date, new ArrayList<>());
         }
@@ -56,7 +57,7 @@ public class CivilRegistry {
                  });
     }
 
-    private long getCount(LocalDate date, TypeRegistry typeRegistry) {
+    private long getCount(@NonNull LocalDate date, @NonNull TypeRegistry typeRegistry) {
         return listRegistry.get(date).stream()
                 .filter(writer -> typeRegistry.equals(writer.getTypeRegistry()))
                 .count();

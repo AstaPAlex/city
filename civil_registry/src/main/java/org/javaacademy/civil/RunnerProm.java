@@ -2,6 +2,8 @@ package org.javaacademy.civil;
 
 import java.time.LocalDate;
 import java.time.Month;
+import org.javaacademy.civil.zags.Citizen;
+import org.javaacademy.civil.zags.CivilRegistry;
 import org.javaacademy.human.Gender;
 
 public class RunnerProm {
