@@ -11,7 +11,8 @@ public class Programmer extends Employee {
     static final int MAX_RATE = 2_000;
     Task task;
 
-    public Programmer(@NonNull String name, @NonNull String surname, @NonNull String patronymic, @NonNull Gender gender) {
+    public Programmer(@NonNull String name, @NonNull String surname,
+                      @NonNull String patronymic, @NonNull Gender gender) {
         super(name, surname, patronymic, gender);
     }
 
