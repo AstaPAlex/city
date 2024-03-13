@@ -50,7 +50,7 @@
                             <archive>
                                 <manifest>
                                     <addClasspath>true</addClasspath>
-                                    <mainClass>RunnerTest</mainClass>
+                                    <mainClass>org.javaacademy.civil.RunnerTest</mainClass>
                                 </manifest>
                             </archive>
                         </configuration>
@@ -98,7 +98,7 @@
                             <archive>
                                 <manifest>
                                     <addClasspath>true</addClasspath>
-                                    <mainClass>RunnerProm</mainClass>
+                                    <mainClass>org.javaacademy.civil.RunnerProm</mainClass>
                                 </manifest>
                             </archive>
                         </configuration>

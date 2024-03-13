@@ -1,4 +1,4 @@
-package org.example;
+package org.javaacademy.human;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

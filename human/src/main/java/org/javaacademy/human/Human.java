@@ -1,9 +1,9 @@
-package org.example;
+package org.javaacademy.human;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.apache.commons.lang3.StringUtils;
-import org.example.exceptions.EqualsGenderParentsException;
+import org.javaacademy.human.exceptions.EqualsGenderParentsException;
 
 import java.util.HashSet;
 import java.util.Set;
