@@ -26,13 +26,13 @@ public class Company {
 
     public void addProgrammer(@NonNull Programmer programmer) {
         programmers.add(programmer);
-        timesheet.put(programmer, hourZero());
+        timesheet.put(programmer, 0.00);
         programmer.setRate(generalRate);
     }
 
     public void addManager(@NonNull Manager manager) {
         this.manager = manager;
-        timesheet.put(manager, hourZero());
+        timesheet.put(manager, 0.00);
     }
 
     public void doWeekWork(@NonNull Queue<Task> tasks) {
@@ -62,21 +62,18 @@ public class Company {
         timesheet.forEach((employee, money) -> totalCoast = totalCoast.add(payMoney(employee)));
     }
 
-    private BigDecimal payMoney(Employee employee) {
+    public BigDecimal payMoney(Employee employee) {
         BigDecimal weeklyPayment = BigDecimal.valueOf(timesheet.get(employee) * employee.getRate());
         employee.setEarnedMoney(employee.getEarnedMoney().add(weeklyPayment));
-        timesheet.put(employee, hourZero());
+        timesheet.put(employee, 0.00);
         return weeklyPayment;
     }
 
+    @Generated
     public void showInfo() {
         System.out.printf("%s\nЗатраты: %.2f\n", name, totalCoast);
         completedTasksProgrammers
-                .forEach((key, value) -> System.out.printf("%s - %s\n", key.getFullName(), value));
-    }
-
-    private Double hourZero() {
-        return 0.00;
+                .forEach((employee, tasks) -> System.out.printf("%s - %s\n", employee.getFullName(), tasks));
     }
 
 }
