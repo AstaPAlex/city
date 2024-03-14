@@ -39,8 +39,8 @@ public class CivilRegistry {
         addRegistry(DIVORCE_REGISTRATION, date, man, woman);
     }
 
-    private void addRegistry(@NonNull TypeRegistry typeRegistry, @NonNull LocalDate date,
-                             @NonNull Citizen... citizens) {
+    private void addRegistry(TypeRegistry typeRegistry, LocalDate date,
+                             Citizen... citizens) {
         if (!listRegistry.containsKey(date)) {
             listRegistry.put(date, new ArrayList<>());
         }
