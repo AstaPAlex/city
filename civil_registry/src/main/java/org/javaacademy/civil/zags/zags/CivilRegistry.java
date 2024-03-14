@@ -1,4 +1,4 @@
-package org.javaacademy.civil;
+package org.javaacademy.civil.zags.zags;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -10,7 +10,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
-import static org.javaacademy.civil.TypeRegistry.*;
+import static org.javaacademy.civil.zags.zags.TypeRegistry.*;
 
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
@@ -56,7 +56,7 @@ public class CivilRegistry {
                  });
     }
 
-    private long getCount(LocalDate date, TypeRegistry typeRegistry) {
+    public long getCount(LocalDate date, TypeRegistry typeRegistry) {
         return listRegistry.get(date).stream()
                 .filter(writer -> typeRegistry.equals(writer.getTypeRegistry()))
                 .count();
